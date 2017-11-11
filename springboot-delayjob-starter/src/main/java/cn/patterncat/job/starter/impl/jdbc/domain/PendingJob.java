@@ -21,7 +21,21 @@ public class PendingJob {
 
     private String jobGroup;
 
-    private String handlerClz;
+    private String jobClass;
+
+    private String lockOwner;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lockTime;
+
+    private boolean enabled = true;
+
+    private int jobPriority = 0;
+
+    /**
+     * 是否幂等,幂等的话,可以重试
+     */
+    private boolean idempotent;
 
     private Date dueTime;
 
@@ -29,7 +43,8 @@ public class PendingJob {
 
     private long delayInMillis;
 
-    private int retryCount;
+    @Builder.Default
+    private int retryCount = 0;
 
     private String createBy;
 

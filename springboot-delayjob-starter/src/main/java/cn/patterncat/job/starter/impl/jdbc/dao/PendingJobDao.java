@@ -4,6 +4,9 @@ import cn.patterncat.job.starter.impl.jdbc.domain.PendingJob;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by patterncat on 2017-11-06.
@@ -11,4 +14,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PendingJobDao extends JpaRepository<PendingJob,Long> {
     Page<PendingJob> findByJobGroup(String jobGroup, Pageable pageable);
     Page<PendingJob> findByHandlerClz(String handlerClz, Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query("update PendingJob set lockOwner = ?1 where id = ?1 and lockOwner is null")
+    public int claimJob(String instanceId,Long jobId);
 }
