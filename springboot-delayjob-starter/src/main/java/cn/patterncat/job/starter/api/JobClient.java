@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
  */
 public interface JobClient<K,T> {
 
-    public JobResp<Page<T>> fetchJobByGroup(String group, Pageable pageable);
+    public JobResp<Page<T>> fetchByJobGroup(String group, Pageable pageable);
 
-    public JobResp<Page<T>> fetchJobByHandlerClz(String handlerClz, Pageable pageable);
+    public JobResp<Page<T>> fetchByJobClass(String jobClass, Pageable pageable);
 
     public JobResp<T> newJob(T jobInfo);
 

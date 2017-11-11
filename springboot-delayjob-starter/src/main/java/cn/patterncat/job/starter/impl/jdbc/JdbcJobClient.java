@@ -28,7 +28,7 @@ public class JdbcJobClient implements JobClient<Long,PendingJob> {
     PendingJobDao pendingJobDao;
 
     @Override
-    public JobResp<Page<PendingJob>> fetchJobByGroup(String group, Pageable pageable) {
+    public JobResp<Page<PendingJob>> fetchByJobGroup(String group, Pageable pageable) {
         try{
             Page<PendingJob> data = pendingJobDao.findByJobGroup(group, pageable);
             return JobResp.<Page<PendingJob>>builder()
@@ -42,9 +42,9 @@ public class JdbcJobClient implements JobClient<Long,PendingJob> {
     }
 
     @Override
-    public JobResp<Page<PendingJob>> fetchJobByHandlerClz(String handlerClz, Pageable pageable) {
+    public JobResp<Page<PendingJob>> fetchByJobClass(String jobClass, Pageable pageable) {
         try{
-            Page<PendingJob> data = pendingJobDao.findByHandlerClz(handlerClz, pageable);
+            Page<PendingJob> data = pendingJobDao.findByJobClass(jobClass, pageable);
             return JobResp.<Page<PendingJob>>builder()
                     .data(data)
                     .success(true)
@@ -59,6 +59,7 @@ public class JdbcJobClient implements JobClient<Long,PendingJob> {
     public JobResp<PendingJob> newJob(PendingJob jobInfo) {
         try{
             PendingJob saved = pendingJobDao.save(jobInfo);
+
             return JobResp.<PendingJob>builder()
                     .data(saved)
                     .success(true)

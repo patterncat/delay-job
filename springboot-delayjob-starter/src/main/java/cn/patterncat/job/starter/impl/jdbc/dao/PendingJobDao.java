@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface PendingJobDao extends JpaRepository<PendingJob,Long> {
     Page<PendingJob> findByJobGroup(String jobGroup, Pageable pageable);
-    Page<PendingJob> findByHandlerClz(String handlerClz, Pageable pageable);
+    Page<PendingJob> findByJobClass(String jobClass, Pageable pageable);
 
     @Modifying
     @Transactional
