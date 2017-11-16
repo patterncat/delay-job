@@ -10,6 +10,12 @@ public class JesqueProperties {
 
     private boolean enabled = true;
 
+    /**
+     * when you only want worker and no need to  use client
+     * you can set clientEnabled = false
+     */
+    private boolean clientEnabled = true;
+
     private String host;
 
     private Integer port = 9221;
@@ -20,7 +26,7 @@ public class JesqueProperties {
 
     private String listenQueues;
 
-    private Integer workersNum = 10;
+    private Integer workersNum = 5;
 
     private Long shutdownAwaitMillis = 30000L;
 
@@ -32,20 +38,23 @@ public class JesqueProperties {
 
     private Integer eventPoolCoreSize = Runtime.getRuntime().availableProcessors();
 
-    private Integer eventPoolMaxSize = 20;
+    private Integer eventPoolMaxSize = 10;
 
-    private Integer eventPoolQueueCapacity = 1000;
+    private Integer eventPoolQueueCapacity = 1024;
 
     private String eventThreadNamePrefix = "job-async-";
 
     //pool worker
-    private boolean poolWorkerEnabled = true;
+    private boolean poolWorkerEnabled = false;
 
     private long poolIntervalInMillis = 500;
 
     //redis object pool config
 
-    private boolean testOnBorrow = false;
+    /**
+     * when use object pool,must turn on object validation
+     */
+    private boolean testOnBorrow = true;
 
     private boolean testOnReturn = false;
 
@@ -53,11 +62,11 @@ public class JesqueProperties {
 
     private boolean testWhileIdle = false;
 
-    private int poolMaxTotal = 20;
+    private int poolMaxTotal = 10;
 
-    private int poolMaxIdle = 8; //生产上建议跟max total一致,避免makeObject开销
+    private int poolMaxIdle = 5;
 
-    private int poolMinIdle = 4;
+    private int poolMinIdle = 1;
 
     private boolean blockWhenExhausted = true;
 
@@ -251,5 +260,13 @@ public class JesqueProperties {
 
     public void setPoolIntervalInMillis(long poolIntervalInMillis) {
         this.poolIntervalInMillis = poolIntervalInMillis;
+    }
+
+    public boolean isClientEnabled() {
+        return clientEnabled;
+    }
+
+    public void setClientEnabled(boolean clientEnabled) {
+        this.clientEnabled = clientEnabled;
     }
 }

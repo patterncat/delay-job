@@ -1,8 +1,6 @@
 package cn.patterncat.jesque;
 
-import cn.patterncat.jesque.component.LogEventListener;
-import cn.patterncat.jesque.component.RedisPooledWorkerImpl;
-import cn.patterncat.jesque.component.WorkerPoolActivator;
+import cn.patterncat.jesque.component.*;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import net.greghaines.jesque.Config;
 import net.greghaines.jesque.ConfigBuilder;
@@ -12,13 +10,13 @@ import net.greghaines.jesque.utils.PoolUtils;
 import net.greghaines.jesque.worker.ReflectiveJobFactory;
 import net.greghaines.jesque.worker.Worker;
 import net.greghaines.jesque.worker.WorkerImpl;
-import net.greghaines.jesque.worker.WorkerPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ApplicationEventMulticaster;
@@ -61,6 +59,8 @@ public class JesqueAutoConfiguration {
         this.properties = jesqueProperties;
     }
 
+    //common config
+
     @Bean
     public Config jesqueConfig() {
         return new ConfigBuilder()
@@ -86,18 +86,10 @@ public class JesqueAutoConfiguration {
         return jedisPool;
     }
 
-    /**
-     * 调用end优化关闭
-     * @param jesqueConfig
-     * @return
-     */
-    @Bean(destroyMethod = "end")
-    public Client jesqueClient(Config jesqueConfig, Pool<Jedis> jedisPool) {
-        return new ClientPoolImpl(jesqueConfig,jedisPool);
-    }
+    //worker config
 
     @Bean
-    public WorkerPool workerPool(Config config,Pool<Jedis> jedisPool) {
+    public Worker jesqueWorker(Config config, Pool<Jedis> jedisPool, ApplicationEventPublisher applicationEventPublisher) {
         Collection<String> queues = Arrays.asList(properties.getListenQueues().split(","));
 
         Callable<? extends Worker> workerFactory = null;
@@ -111,19 +103,44 @@ public class JesqueAutoConfiguration {
                     queues,
                     new ReflectiveJobFactory() /**根据全类名来实例化job,例如DemoJob.class.getName()*/);
         }
-        WorkerPool workerPool = new WorkerPool(workerFactory,
+        Worker workerPool = new RobustWorkerPool(workerFactory,
                 properties.getWorkersNum());
 
-        if(properties.isLogEventEnabled()){
-            workerPool.getWorkerEventEmitter().addListener(new LogEventListener());
-        }
+        workerPool.getWorkerEventEmitter().addListener(new EventListenerAdapter(applicationEventPublisher,properties.isLogEventEnabled()));
 
         return workerPool;
     }
 
     @Bean(name = "workerPoolActivator")
-    public WorkerPoolActivator workerPoolActivator(WorkerPool workerPool){
-        return new WorkerPoolActivator(workerPool,properties.getShutdownAwaitMillis());
+    public WorkerActivator workerPoolActivator(Worker jesqueWorker){
+        return new WorkerActivator(jesqueWorker,properties.getShutdownAwaitMillis());
+    }
+
+    //client config
+
+    @Bean
+    @ConditionalOnProperty(
+            value = "jesque.client-enabled",
+            havingValue = "true",
+            matchIfMissing = true
+    )
+    public JesqueService jesqueService(){
+        return new JesqueService();
+    }
+
+    /**
+     * 调用end优化关闭
+     * @param jesqueConfig
+     * @return
+     */
+    @Bean(destroyMethod = "end")
+    @ConditionalOnProperty(
+            value = "jesque.client-enabled",
+            havingValue = "true",
+            matchIfMissing = true
+    )
+    public Client jesqueClient(Config jesqueConfig, Pool<Jedis> jedisPool) {
+        return new ClientPoolImpl(jesqueConfig,jedisPool);
     }
 
     //spring event config

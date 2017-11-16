@@ -1,0 +1,17 @@
+logging:
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%thread]){faint} %clr(%-40.40logger{39}){cyan} %L %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"
+
+jesque:
+  enabled: true
+  client-enabled: true
+  host: 192.168.99.100
+  port: 6379
+  password: 123456
+  namespace: demoapp
+  pool-interval-in-millis: 500
+  listen-queues: delayed-queue
+  workers-num: 10
+  shutdown-await-millis: 30000
+  log-event-enabled: false
+  pool-worker-enabled: true
