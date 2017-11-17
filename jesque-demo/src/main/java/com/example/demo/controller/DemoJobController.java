@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * Created by patterncat on 2017-11-15.
  */
@@ -22,7 +24,9 @@ public class DemoJobController {
     @GetMapping(value = "")
     public String addDelayJob(@RequestParam String content){
         Object[] params = new Object[]{content,System.currentTimeMillis()};
-        jesqueService.delayedEnqueue("delayed-queue",DemoJob.class,params,System.currentTimeMillis() + 10*1000);
+        Job job = new Job(DemoJob.class.getName(),params);
+        job.setUnknownField("jobId", UUID.randomUUID().toString());
+        jesqueService.delayedEnqueue("delayed-queue",job,System.currentTimeMillis() + 10*1000);
         return "ok";
     }
 }

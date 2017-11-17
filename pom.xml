@@ -12,9 +12,13 @@
 	<description>delay-job</description>
 
 	<modules>
-		<module>springboot-delayjob-starter</module>
+		<module>job-common</module>
 		<module>springboot-jesque-starter</module>
-		<module>job-demo</module>
+		<module>job-event-store-jdbc</module>
+		<module>job-event-store-mongo</module>
+		<module>job-event-store-elasticsearch</module>
+		<module>jesque-demo</module>
+		<module>job-jdbc-store-demo</module>
 	</modules>
 
 	<properties>

@@ -1,16 +1,15 @@
 package cn.patterncat.jesque.component;
 
-import cn.patterncat.jesque.event.JobEvent;
-import cn.patterncat.jesque.event.JobEventType;
+import cn.patterncat.jesque.JesqueProperties;
+import cn.patterncat.job.event.JobEvent;
+import cn.patterncat.job.event.JobEventType;
 import net.greghaines.jesque.Job;
 import net.greghaines.jesque.worker.Worker;
 import net.greghaines.jesque.worker.WorkerEvent;
 import net.greghaines.jesque.worker.WorkerListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationEventPublisherAware;
 
 /**
  * Created by patterncat on 2017-11-16.
@@ -21,11 +20,11 @@ public class EventListenerAdapter implements WorkerListener{
 
     ApplicationEventPublisher applicationEventPublisher;
 
-    boolean logEventEnabled;
+    JesqueProperties properties;
 
-    public EventListenerAdapter(ApplicationEventPublisher applicationEventPublisher, boolean logEventEnabled) {
+    public EventListenerAdapter(ApplicationEventPublisher applicationEventPublisher, JesqueProperties properties) {
         this.applicationEventPublisher = applicationEventPublisher;
-        this.logEventEnabled = logEventEnabled;
+        this.properties = properties;
     }
 
     @Override
@@ -35,18 +34,27 @@ public class EventListenerAdapter implements WorkerListener{
             return ;
         }
 
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+        JobEvent.Builder builder = JobEvent.builder(this)
                 .jobEventType(JobEventType.valueOf(event.name()))
-                .job(job)
+                .namespace(properties.getNamespace())
                 .queue(queue)
-                .worker(worker)
                 .runner(runner)
                 .result(result)
-                .throwable(t)
-                .build()
-        );
+                .throwable(t);
 
-        if(!logEventEnabled){
+        if(job != null){
+            builder.jobClassName(job.getClassName())
+                    .jobArgs(job.getArgs())
+                    .jobVars(job.getVars())
+                    .jobUnknownFields(job.getUnknownFields());
+        }
+        if(worker != null){
+            builder.worker(worker.getName());
+        }
+
+        applicationEventPublisher.publishEvent(builder.build());
+
+        if(!properties.isLogEventEnabled()){
             return ;
         }
 

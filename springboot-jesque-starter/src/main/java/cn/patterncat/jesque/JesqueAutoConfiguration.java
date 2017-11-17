@@ -29,7 +29,9 @@ import redis.clients.util.Pool;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by patterncat on 2017-11-16.
@@ -103,10 +105,17 @@ public class JesqueAutoConfiguration {
                     queues,
                     new ReflectiveJobFactory() /**根据全类名来实例化job,例如DemoJob.class.getName()*/);
         }
+//        try{
+//            TimeUnit.MILLISECONDS.sleep(properties.getDelayToStartPollingMillis());
+//        }catch (Exception e){
+//            LOGGER.error(e.getMessage(),e);
+//        }
         Worker workerPool = new RobustWorkerPool(workerFactory,
-                properties.getWorkersNum());
+                properties.getWorkersNum(),
+                Executors.defaultThreadFactory(),
+                properties.getDelayToStartPollingMillis());
 
-        workerPool.getWorkerEventEmitter().addListener(new EventListenerAdapter(applicationEventPublisher,properties.isLogEventEnabled()));
+        workerPool.getWorkerEventEmitter().addListener(new EventListenerAdapter(applicationEventPublisher,properties));
 
         return workerPool;
     }

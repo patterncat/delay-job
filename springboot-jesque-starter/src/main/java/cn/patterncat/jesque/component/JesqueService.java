@@ -1,9 +1,10 @@
 package cn.patterncat.jesque.component;
 
 
-import cn.patterncat.jesque.event.JobEvent;
-import cn.patterncat.jesque.event.JobEventType;
-import cn.patterncat.jesque.event.JobType;
+import cn.patterncat.jesque.JesqueProperties;
+import cn.patterncat.job.event.JobEvent;
+import cn.patterncat.job.event.JobEventType;
+import cn.patterncat.job.event.JobType;
 import net.greghaines.jesque.Job;
 import net.greghaines.jesque.client.Client;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,84 +16,79 @@ import org.springframework.context.ApplicationEventPublisher;
 public class JesqueService {
 
     @Autowired
+    JesqueProperties jesqueProperties;
+
+    @Autowired
     Client jesqueClient;
 
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
-    public void delayedEnqueue(String queue,Class jobClz,Object[] params,long futureFireTimeInMillis){
-        Job job = new Job(jobClz.getName(),params);
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+    public void delayedEnqueue(String queue,Job job,long futureFireTimeInMillis){
+        applicationEventPublisher.publishEvent(from(queue,job)
                 .jobEventType(JobEventType.JOB_SUBMITT)
-                .queue(queue)
                 .jobType(JobType.DELAYED)
                 .future(futureFireTimeInMillis)
-                .runner(Thread.currentThread())
-                .job(job)
                 .build()
         );
         jesqueClient.delayedEnqueue(queue,job,futureFireTimeInMillis);
     }
 
     public void immediateEnqueue(String queue, Job job){
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
-                .jobEventType(JobEventType.JOB_SUBMITT)
-                .queue(queue)
-                .jobType(JobType.IMMEDIATE)
-                .runner(Thread.currentThread())
-                .job(job)
-                .build()
+        applicationEventPublisher.publishEvent(from(queue,job)
+                        .jobEventType(JobEventType.JOB_SUBMITT)
+                        .jobType(JobType.IMMEDIATE)
+                        .build()
         );
         jesqueClient.enqueue(queue, job);
     }
 
     public void priorityEnqueue(String queue, Job job){
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+        applicationEventPublisher.publishEvent(from(queue,job)
                 .jobEventType(JobEventType.JOB_SUBMITT)
-                .queue(queue)
                 .jobType(JobType.PRIORITY)
-                .runner(Thread.currentThread())
-                .job(job)
                 .build()
         );
         jesqueClient.priorityEnqueue(queue, job);
     }
 
     public void recurringEnqueue(String queue, Job job, long future, long frequency){
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+        applicationEventPublisher.publishEvent(from(queue,job)
                 .jobEventType(JobEventType.JOB_SUBMITT)
-                .queue(queue)
                 .jobType(JobType.RECURRING)
                 .future(future)
                 .frequency(frequency)
-                .runner(Thread.currentThread())
-                .job(job)
                 .build()
         );
         jesqueClient.recurringEnqueue(queue, job, future, frequency);
     }
 
     public void removeDelayedEnqueue(String queue, Job job){
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+        applicationEventPublisher.publishEvent(from(queue,job)
                 .jobEventType(JobEventType.JOB_REMOVE)
-                .queue(queue)
                 .jobType(JobType.DELAYED)
-                .runner(Thread.currentThread())
-                .job(job)
                 .build()
         );
         jesqueClient.removeDelayedEnqueue(queue, job);
     }
 
     public void removeRecurringEnqueue(String queue, Job job) {
-        applicationEventPublisher.publishEvent(JobEvent.builder(this)
+        applicationEventPublisher.publishEvent(from(queue,job)
                 .jobEventType(JobEventType.JOB_REMOVE)
-                .queue(queue)
                 .jobType(JobType.RECURRING)
-                .runner(Thread.currentThread())
-                .job(job)
                 .build()
         );
         jesqueClient.removeRecurringEnqueue(queue, job);
+    }
+
+    public JobEvent.Builder from(String queue,Job job){
+        return JobEvent.builder(this)
+                .queue(queue)
+                .namespace(jesqueProperties.getNamespace())
+                .runner(Thread.currentThread())
+                .jobClassName(job.getClassName())
+                .jobArgs(job.getArgs())
+                .jobVars(job.getVars())
+                .jobUnknownFields(job.getUnknownFields());
     }
 }

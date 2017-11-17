@@ -1,6 +1,6 @@
 package com.example.demo.listener;
 
-import cn.patterncat.jesque.event.JobEvent;
+import cn.patterncat.job.event.JobEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;

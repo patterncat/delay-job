@@ -49,6 +49,8 @@ public class JesqueProperties {
 
     private long poolIntervalInMillis = 500;
 
+    private long delayToStartPollingMillis = 10*1000;
+
     //redis object pool config
 
     /**
@@ -268,5 +270,13 @@ public class JesqueProperties {
 
     public void setClientEnabled(boolean clientEnabled) {
         this.clientEnabled = clientEnabled;
+    }
+
+    public long getDelayToStartPollingMillis() {
+        return delayToStartPollingMillis;
+    }
+
+    public void setDelayToStartPollingMillis(long delayToStartPollingMillis) {
+        this.delayToStartPollingMillis = delayToStartPollingMillis;
     }
 }
