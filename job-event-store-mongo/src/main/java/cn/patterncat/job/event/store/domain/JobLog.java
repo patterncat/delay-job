@@ -9,10 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by patterncat on 2017-11-17.
@@ -24,6 +23,8 @@ public class JobLog {
 
     @Id
     private String id;
+
+    String jobId;
 
     JobEventType jobEventType;
 
@@ -49,7 +50,7 @@ public class JobLog {
 
     Map<String,Object> jobUnknownFields;
 
-    Object runner;
+    String runner;
 
     Object result;
 
@@ -72,21 +73,15 @@ public class JobLog {
                 .frequency(jobEvent.getFrequency())
                 .future(jobEvent.getFuture())
                 .jobClass(jobEvent.getJobClassName())
+                .jobId(Objects.toString(jobEvent.getJobUnknownFields().get("jobId"),""))
                 .jobArgs(jobEvent.getJobArgs())
                 .jobVars(jobEvent.getJobVars())
                 .jobUnknownFields(jobEvent.getJobUnknownFields())
-                .runner(jobEvent.getRunner())
+                .runner(jobEvent.getRunnerString())
                 .result(jobEvent.getResult())
-                .throwable(getStackTrace(jobEvent.getThrowable()))
+                .throwable(jobEvent.getThrowableString(Integer.MAX_VALUE))
                 .build();
         return log;
 
-    }
-
-    public static String getStackTrace(final Throwable throwable) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
     }
 }

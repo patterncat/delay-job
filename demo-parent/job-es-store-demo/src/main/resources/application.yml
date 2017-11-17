@@ -1,0 +1,23 @@
+jesque:
+  enabled: true
+  client-enabled: true
+  host: 192.168.99.100
+  port: 9221
+  password: pwd
+  namespace: myapp
+  listen-queues: delayed-queue
+  workers-num: 5
+  shutdown-await-millis: 30000
+  log-event-enabled: true
+  pool-worker-enabled: true
+  delay-to-start-polling-millis: 30000
+  store:
+    elasticsearch:
+      enabled: true
+spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      cluster-name: elasticsearch
+      cluster-nodes: 192.168.99.100:9300

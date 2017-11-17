@@ -5,20 +5,20 @@ import cn.patterncat.job.event.store.dao.JobLogDao;
 import cn.patterncat.job.event.store.domain.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by patterncat on 2017-11-17.
  */
-@Component
 public class MongoStoreEventListener implements ApplicationListener<JobEvent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MongoStoreEventListener.class);
 
-    @Autowired
     JobLogDao jobLogDao;
+
+    public MongoStoreEventListener(JobLogDao jobLogDao) {
+        this.jobLogDao = jobLogDao;
+    }
 
     public void onApplicationEvent(JobEvent event) {
         try{

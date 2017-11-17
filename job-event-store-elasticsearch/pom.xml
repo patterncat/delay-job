@@ -5,7 +5,7 @@
 
 	<groupId>cn.patterncat</groupId>
 	<artifactId>job-event-store-elasticsearch</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>job-event-store-elasticsearch</name>
@@ -34,10 +34,16 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<lombok.version>1.16.18</lombok.version>
+		<fastjson.version>1.2.40</fastjson.version>
 		<maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

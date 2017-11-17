@@ -3,25 +3,30 @@ package cn.patterncat.job.event.store.domain;
 import cn.patterncat.job.event.JobEvent;
 import cn.patterncat.job.event.JobEventType;
 import cn.patterncat.job.event.JobType;
+import com.alibaba.fastjson.JSON;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Version;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by patterncat on 2017-11-17.
  */
 @Data
 @Builder
-@Document(indexName="joblog")
+@Document(indexName="joblog",type = "event")
+//@Mapping(mappingPath = "elasticsearch/mappings.json")
 public class JobLog {
 
     private String id;
+
+    String jobId;
 
     JobEventType jobEventType;
 
@@ -41,13 +46,13 @@ public class JobLog {
 
     String jobClass;
 
-    Object[] jobArgs;
+    String jobArgs;
 
-    Map<String,Object> jobVars;
+    String jobVars;
 
-    Map<String,Object> jobUnknownFields;
+    String jobUnknownFields;
 
-    Object runner;
+    String runner;
 
     Object result;
 
@@ -70,21 +75,22 @@ public class JobLog {
                 .frequency(jobEvent.getFrequency())
                 .future(jobEvent.getFuture())
                 .jobClass(jobEvent.getJobClassName())
-                .jobArgs(jobEvent.getJobArgs())
-                .jobVars(jobEvent.getJobVars())
-                .jobUnknownFields(jobEvent.getJobUnknownFields())
-                .runner(jobEvent.getRunner())
+                .jobId(Objects.toString(jobEvent.getJobUnknownFields().get("jobId"),""))
+                .jobArgs(object2Json(jobEvent.getJobArgs()))
+                .jobVars(object2Json(jobEvent.getJobVars()))
+                .jobUnknownFields(object2Json(jobEvent.getJobUnknownFields()))
+                .runner(jobEvent.getRunnerString())
                 .result(jobEvent.getResult())
-                .throwable(getStackTrace(jobEvent.getThrowable()))
+                .throwable(jobEvent.getThrowableString(Integer.MAX_VALUE))
                 .build();
         return log;
 
     }
 
-    public static String getStackTrace(final Throwable throwable) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        return sw.getBuffer().toString();
+    public static String object2Json(Object object){
+        if(object == null){
+            return "";
+        }
+        return JSON.toJSONString(object);
     }
 }

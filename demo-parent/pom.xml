@@ -3,21 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>cn.patterncat</groupId>
-	<artifactId>delay-job</artifactId>
-	<version>0.0.1</version>
+	<groupId>com.example</groupId>
+	<artifactId>job-demo-parent</artifactId>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 
-	<name>delay-job</name>
-	<description>delay-job</description>
+	<name>job-demo-parent</name>
+	<description>job-demo-parent</description>
 
 	<modules>
-		<module>job-common</module>
-		<module>springboot-jesque-starter</module>
-		<module>job-event-store-jdbc</module>
-		<module>job-event-store-mongo</module>
-		<module>job-event-store-elasticsearch</module>
-		<module>demo-parent</module>
+		<module>jesque-demo</module>
+		<module>job-jdbc-store-demo</module>
+		<module>job-mongo-store-demo</module>
+		<module>job-es-store-demo</module>
 	</modules>
 
 	<properties>
@@ -25,5 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 	</properties>
+
+
 
 </project>
