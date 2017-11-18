@@ -1,4 +1,8 @@
 # changelog
+## v0.0.4
+- rename async event enabled
+- add admin enabled config for relative dao
+
 ## v0.0.3
 - add worker enabled config
 

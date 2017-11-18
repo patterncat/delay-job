@@ -6,6 +6,14 @@ import net.greghaines.jesque.Config;
 import net.greghaines.jesque.ConfigBuilder;
 import net.greghaines.jesque.client.Client;
 import net.greghaines.jesque.client.ClientPoolImpl;
+import net.greghaines.jesque.meta.dao.FailureDAO;
+import net.greghaines.jesque.meta.dao.KeysDAO;
+import net.greghaines.jesque.meta.dao.QueueInfoDAO;
+import net.greghaines.jesque.meta.dao.WorkerInfoDAO;
+import net.greghaines.jesque.meta.dao.impl.FailureDAORedisImpl;
+import net.greghaines.jesque.meta.dao.impl.KeysDAORedisImpl;
+import net.greghaines.jesque.meta.dao.impl.QueueInfoDAORedisImpl;
+import net.greghaines.jesque.meta.dao.impl.WorkerInfoDAORedisImpl;
 import net.greghaines.jesque.utils.PoolUtils;
 import net.greghaines.jesque.worker.ReflectiveJobFactory;
 import net.greghaines.jesque.worker.Worker;
@@ -157,7 +165,7 @@ public class JesqueAutoConfiguration {
     //spring event config
 
     @Bean(name = "jobExecutor")
-    @ConditionalOnProperty(value = "jesque.asyncEvent",havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(value = "jesque.async-event-enabled",havingValue = "true",matchIfMissing = false)
     protected TaskExecutor jobExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(properties.getEventPoolCoreSize());
@@ -175,11 +183,36 @@ public class JesqueAutoConfiguration {
 
     @Bean(name = "applicationEventMulticaster")
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(value = "jesque.asyncEvent",havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(value = "jesque.async-event-enabled",havingValue = "true",matchIfMissing = false)
     public ApplicationEventMulticaster simpleApplicationEventMulticaster() {
         SimpleApplicationEventMulticaster eventMulticaster
                 = new SimpleApplicationEventMulticaster();
         eventMulticaster.setTaskExecutor(jobExecutor());
         return eventMulticaster;
+    }
+
+    //admin dao config
+    @Bean
+    @ConditionalOnProperty(value = "jesque.admin-enabled",havingValue = "true",matchIfMissing = false)
+    public FailureDAO failureDAO(Config jesqueConfig, Pool<Jedis> jedisPool){
+        return new FailureDAORedisImpl(jesqueConfig,jedisPool);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "jesque.admin-enabled",havingValue = "true",matchIfMissing = false)
+    public KeysDAO keysDAO(Config jesqueConfig, Pool<Jedis> jedisPool){
+        return new KeysDAORedisImpl(jesqueConfig,jedisPool);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "jesque.admin-enabled",havingValue = "true",matchIfMissing = false)
+    public QueueInfoDAO queueInfoDAO(Config jesqueConfig, Pool<Jedis> jedisPool){
+        return new QueueInfoDAORedisImpl(jesqueConfig,jedisPool);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "jesque.admin-enabled",havingValue = "true",matchIfMissing = false)
+    public WorkerInfoDAO workerInfoDAO(Config jesqueConfig, Pool<Jedis> jedisPool){
+        return new WorkerInfoDAORedisImpl(jesqueConfig,jedisPool);
     }
 }

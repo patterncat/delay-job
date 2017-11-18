@@ -1,9 +1,9 @@
 ## jesque
 use jesque as a delay queue implementation
 
-## version info
+## latest version info
 - springboot-jesque-starter
-v0.0.3
+v0.0.4
 
 - job-common
 v0.0.2

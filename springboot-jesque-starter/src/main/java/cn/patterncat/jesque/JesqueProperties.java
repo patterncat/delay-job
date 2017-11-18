@@ -18,6 +18,8 @@ public class JesqueProperties {
 
     private boolean workerEnabled = true;
 
+    private boolean adminEnabled = false;
+
     private String host;
 
     private Integer port = 9221;
@@ -34,7 +36,7 @@ public class JesqueProperties {
 
     //event
 
-    private boolean asyncEvent = true;
+    private boolean asyncEventEnabled = true;
 
     private boolean logEventEnabled = true;
 
@@ -210,12 +212,12 @@ public class JesqueProperties {
         this.blockWhenExhausted = blockWhenExhausted;
     }
 
-    public boolean isAsyncEvent() {
-        return asyncEvent;
+    public boolean isAsyncEventEnabled() {
+        return asyncEventEnabled;
     }
 
-    public void setAsyncEvent(boolean asyncEvent) {
-        this.asyncEvent = asyncEvent;
+    public void setAsyncEventEnabled(boolean asyncEventEnabled) {
+        this.asyncEventEnabled = asyncEventEnabled;
     }
 
     public Integer getEventPoolCoreSize() {
@@ -288,5 +290,13 @@ public class JesqueProperties {
 
     public void setWorkerEnabled(boolean workerEnabled) {
         this.workerEnabled = workerEnabled;
+    }
+
+    public boolean isAdminEnabled() {
+        return adminEnabled;
+    }
+
+    public void setAdminEnabled(boolean adminEnabled) {
+        this.adminEnabled = adminEnabled;
     }
 }
