@@ -91,6 +91,7 @@ public class JesqueAutoConfiguration {
     //worker config
 
     @Bean
+    @ConditionalOnProperty(value = "jesque.worker-enabled",havingValue = "true",matchIfMissing = true)
     public Worker jesqueWorker(Config config, Pool<Jedis> jedisPool, ApplicationEventPublisher applicationEventPublisher) {
         Collection<String> queues = Arrays.asList(properties.getListenQueues().split(","));
 
@@ -121,6 +122,7 @@ public class JesqueAutoConfiguration {
     }
 
     @Bean(name = "workerPoolActivator")
+    @ConditionalOnProperty(value = "jesque.worker-enabled",havingValue = "true",matchIfMissing = true)
     public WorkerActivator workerPoolActivator(Worker jesqueWorker){
         return new WorkerActivator(jesqueWorker,properties.getShutdownAwaitMillis());
     }

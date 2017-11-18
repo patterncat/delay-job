@@ -16,6 +16,8 @@ public class JesqueProperties {
      */
     private boolean clientEnabled = true;
 
+    private boolean workerEnabled = true;
+
     private String host;
 
     private Integer port = 9221;
@@ -278,5 +280,13 @@ public class JesqueProperties {
 
     public void setDelayToStartPollingMillis(long delayToStartPollingMillis) {
         this.delayToStartPollingMillis = delayToStartPollingMillis;
+    }
+
+    public boolean isWorkerEnabled() {
+        return workerEnabled;
+    }
+
+    public void setWorkerEnabled(boolean workerEnabled) {
+        this.workerEnabled = workerEnabled;
     }
 }

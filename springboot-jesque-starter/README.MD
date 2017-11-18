@@ -1,4 +1,7 @@
 # changelog
+## v0.0.3
+- add worker enabled config
+
 ## v0.0.2
 - add jobid for job event
 - add event store : jdbc\mongo\elasticsearch
