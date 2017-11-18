@@ -27,6 +27,7 @@ public class DemoJob implements Runnable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        throw new RuntimeException("demo ex");
     }
 
 

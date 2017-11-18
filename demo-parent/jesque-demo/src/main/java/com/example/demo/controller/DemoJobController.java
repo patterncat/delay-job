@@ -26,7 +26,7 @@ public class DemoJobController {
         Object[] params = new Object[]{content,System.currentTimeMillis()};
         Job job = new Job(DemoJob.class.getName(),params);
         job.setUnknownField("jobId", UUID.randomUUID().toString());
-        jesqueService.delayedEnqueue("delayed-queue",job,System.currentTimeMillis() + 10*1000);
+        jesqueService.delayedEnqueue("demoqueue",job,System.currentTimeMillis() + 10*1000);
         return "ok";
     }
 }

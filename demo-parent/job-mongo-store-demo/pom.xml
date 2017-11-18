@@ -5,7 +5,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>job-mongo-store-demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>job-mongo-store-demo</name>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>cn.patterncat</groupId>
 			<artifactId>springboot-jesque-starter</artifactId>
-			<version>0.0.2</version>
+			<version>0.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>net.greghaines</groupId>

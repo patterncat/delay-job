@@ -1,6 +1,9 @@
 jesque:
   enabled: true
   client-enabled: true
+  worker-enabled: true
+  admin-enabled: false
+  async-event-enabled: false
   host: 192.168.99.100
   port: 9221
   password: pwd
