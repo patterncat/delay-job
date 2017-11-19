@@ -24,10 +24,10 @@ public class JobLogDao {
     @Autowired
     JdbcJobStoreProperties properties;
 
-    private static final String INSERT = "insert into %s (create_time, event_timestamp, frequency, "
-            + "future, job_args, job_class, job_event_type, job_type, job_unknown_fields, job_vars, namespace, queue,"
-            + "result,runner,throwable,worker_name) "
-            + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "insert into %s (create_time, event_timestamp, frequency,"
+            + "future, job_args, job_class, job_event_type, job_type, job_unknown_fields, job_vars, namespace,"
+            + "queue, result, runner, throwable, worker_name, job_id) "
+            + "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     public void insert(JobLog jobLog) {
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -49,6 +49,7 @@ public class JobLogDao {
                                     ps.setString(14, jobLog.getRunner());
                                     ps.setString(15, jobLog.getThrowable());
                                     ps.setString(16, jobLog.getWorkerName());
+                                    ps.setString(17, jobLog.getJobId());
                                     return ps;
                                 }
                             }

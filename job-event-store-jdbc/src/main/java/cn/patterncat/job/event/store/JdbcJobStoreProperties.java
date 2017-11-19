@@ -10,6 +10,10 @@ public class JdbcJobStoreProperties {
 
     private boolean enabled = true;
 
+    private boolean listenerEnabled = true;
+
+    private boolean restEnabled = false;
+
     private String tableName = "job_event_log";
 
     private String dataSourceName = "dataSource";
@@ -36,5 +40,21 @@ public class JdbcJobStoreProperties {
 
     public void setDataSourceName(String dataSourceName) {
         this.dataSourceName = dataSourceName;
+    }
+
+    public boolean isListenerEnabled() {
+        return listenerEnabled;
+    }
+
+    public void setListenerEnabled(boolean listenerEnabled) {
+        this.listenerEnabled = listenerEnabled;
+    }
+
+    public boolean isRestEnabled() {
+        return restEnabled;
+    }
+
+    public void setRestEnabled(boolean restEnabled) {
+        this.restEnabled = restEnabled;
     }
 }

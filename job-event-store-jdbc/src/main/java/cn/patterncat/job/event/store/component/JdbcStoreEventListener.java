@@ -6,6 +6,7 @@ import cn.patterncat.job.event.store.domain.JobLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
  * Created by patterncat on 2017-11-17.
  */
 @Component
+@ConditionalOnProperty(value = "jesque.store.jdbc.listener-enabled",havingValue = "true",matchIfMissing = true)
 public class JdbcStoreEventListener implements ApplicationListener<JobEvent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcStoreEventListener.class);
