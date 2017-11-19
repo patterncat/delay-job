@@ -1,6 +1,11 @@
 ## jesque
 use jesque as a delay queue implementation
 
+## todo
+- event store add rest query api
+- add alert for jesque
+- add ui for jesque admin
+
 ## latest version info
 - springboot-jesque-starter
 v0.0.4
