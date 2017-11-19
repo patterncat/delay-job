@@ -1,5 +1,15 @@
 server:
   port: 8081
+management:
+  security:
+    enabled: true
+security:
+  basic:
+    enabled: true
+    path: "/**"
+  user:
+    name: admin
+    password: admin
 jesque:
   enabled: true
   admin-enabled: true
