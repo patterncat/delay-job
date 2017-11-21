@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
 
@@ -44,6 +45,12 @@ public class JdbcEventStoreAutoConfiguration implements ApplicationContextAware 
     @ConditionalOnMissingBean
     public JdbcTemplate jdbcTemplate(DataSource jobDataSource) {
         return new JdbcTemplate(jobDataSource);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
+        return new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Bean

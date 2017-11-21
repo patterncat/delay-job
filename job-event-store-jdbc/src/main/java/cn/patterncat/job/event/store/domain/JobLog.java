@@ -73,7 +73,7 @@ public class JobLog {
                 .jobClass(jobEvent.getJobClassName())
                 .jobArgs(object2Json(jobEvent.getJobArgs()))
                 .jobVars(object2Json(jobEvent.getJobVars()))
-                .jobId(Objects.toString(jobEvent.getJobUnknownFields().get("jobId"),""))
+                .jobId(jobEvent.getJobUnknownFields() == null ? "" : Objects.toString(jobEvent.getJobUnknownFields().get("jobId"),""))
                 .jobUnknownFields(object2Json(jobEvent.getJobUnknownFields()))
                 .runner(jobEvent.getRunnerString())
                 .result(object2Json(jobEvent.getResult()))
