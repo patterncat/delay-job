@@ -1,5 +1,6 @@
 package cn.patterncat.job.event.store;
 
+import cn.patterncat.job.event.store.domain.JobLog;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -9,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -42,6 +44,12 @@ public class JdbcEventStoreAutoConfiguration implements ApplicationContextAware 
     @ConditionalOnMissingBean
     public JdbcTemplate jdbcTemplate(DataSource jobDataSource) {
         return new JdbcTemplate(jobDataSource);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public BeanPropertyRowMapper<JobLog> jobLogBeanPropertyRowMapper(){
+        return new BeanPropertyRowMapper<JobLog>(JobLog.class);
     }
 
 
