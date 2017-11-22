@@ -6,18 +6,25 @@ use jesque as a delay queue implementation
 - add alert for jesque
 - add ui for jesque admin
 
-## latest version info
-- springboot-jesque-starter
-v0.0.4
+# latest version info
+## job-admin-ui
+- v0.0.1
 
-- job-common
-v0.0.2
+## springboot-jesque-starter
+- v0.0.4
 
-- job-event-store-jdbc
-v0.0.2
+## job-common
+- v0.0.2
 
-- job-event-store-mongo
-v0.0.2
+## job-event-store-jdbc
+- v0.0.3
 
-- job-event-store-elasticsearch
-v0.0.2
+add web controller
+
+- v0.0.2
+
+## job-event-store-mongo
+- v0.0.2
+
+## job-event-store-elasticsearch
+- v0.0.2
