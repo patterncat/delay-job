@@ -1,6 +1,6 @@
 package cn.patterncat.job.admin.controller;
 
-import cn.patterncat.job.admin.model.RestResp;
+import cn.patterncat.rest.ApiResult;
 import net.greghaines.jesque.meta.WorkerInfo;
 import net.greghaines.jesque.meta.dao.WorkerInfoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,14 @@ public class WorkerInfoController {
     WorkerInfoDAO workerInfoDAO;
 
     @GetMapping("")
-    public RestResp<Map<String, List<WorkerInfo>>> getWorkerHostMap(){
+    public ApiResult<Map<String, List<WorkerInfo>>> getWorkerHostMap(){
         Map<String, List<WorkerInfo>> data = workerInfoDAO.getWorkerHostMap();
-        return RestResp.<Map<String, List<WorkerInfo>>>builder().success(true).data(data).build();
+        return ApiResult.success(data);
     }
 
     @DeleteMapping("/{worker}")
-    public RestResp removeWorker(@PathVariable String worker){
+    public ApiResult removeWorker(@PathVariable String worker){
         workerInfoDAO.removeWorker(worker);
-        return RestResp.builder().success(true).build();
+        return ApiResult.success();
     }
 }

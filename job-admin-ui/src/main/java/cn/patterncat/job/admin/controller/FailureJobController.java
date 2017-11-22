@@ -1,6 +1,6 @@
 package cn.patterncat.job.admin.controller;
 
-import cn.patterncat.job.admin.model.RestResp;
+import cn.patterncat.rest.ApiResult;
 import net.greghaines.jesque.JobFailure;
 import net.greghaines.jesque.meta.dao.FailureDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class FailureJobController {
     FailureDAO failureDAO;
 
     @GetMapping("/count")
-    public RestResp<Long> getFailJobCount(){
+    public ApiResult<Long> getFailJobCount(){
         long count = failureDAO.getCount();
-        return RestResp.<Long>builder().success(true).data(count).build();
+        return ApiResult.success(count);
     }
 
     @GetMapping("")
-    public RestResp<Page<JobFailure>> failJobList(@RequestParam(required = false,defaultValue = "0") int page,
+    public ApiResult<Page<JobFailure>> failJobList(@RequestParam(required = false,defaultValue = "0") int page,
                                                         @RequestParam(required = false,defaultValue = "10") int size){
         Pageable pageable = new PageRequest(page,size);
         long count = failureDAO.getCount();
@@ -42,24 +42,24 @@ public class FailureJobController {
             pageData = new PageImpl<JobFailure>(jobFailures,pageable,count);
         }
 
-        return RestResp.<Page<JobFailure>>builder().success(true).data(pageData).build();
+        return ApiResult.success(pageData);
     }
 
     @PostMapping("/clear")
-    public RestResp clearJobFailure(){
+    public ApiResult clearJobFailure(){
         failureDAO.clear();
-        return RestResp.builder().success(true).build();
+        return ApiResult.success();
     }
 
     @PostMapping("/remove/{idx}")
-    public RestResp remove(@PathVariable Long idx){
+    public ApiResult remove(@PathVariable Long idx){
         failureDAO.remove(idx);
-        return RestResp.builder().success(true).build();
+        return ApiResult.success();
     }
 
     @PostMapping("/requeue/{idx}")
-    public RestResp requeue(@PathVariable Long idx){
+    public ApiResult requeue(@PathVariable Long idx){
         failureDAO.requeue(idx);
-        return RestResp.builder().success(true).build();
+        return ApiResult.success();
     }
 }

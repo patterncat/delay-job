@@ -1,6 +1,6 @@
 package cn.patterncat.job.admin.exception;
 
-import cn.patterncat.job.admin.model.RestResp;
+import cn.patterncat.rest.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,15 +19,15 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(JedisConnectionException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestResp jedisConnectionException(JedisConnectionException ex){
+    public ApiResult jedisConnectionException(JedisConnectionException ex){
         LOGGER.error(ex.getMessage(),ex);
-        return RestResp.builder().success(false).message(ex.getMessage()).build();
+        return ApiResult.fail(ex.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestResp genericError(final Exception ex) {
+    public ApiResult genericError(final Exception ex) {
         LOGGER.error(ex.getMessage(),ex);
-        return RestResp.builder().success(false).message(ex.getMessage()).build();
+        return ApiResult.fail(ex.getMessage());
     }
 }

@@ -12,6 +12,8 @@ public class JdbcJobStoreProperties {
 
     private boolean listenerEnabled = true;
 
+    private boolean webEnabled = false;
+
     private boolean restEnabled = false;
 
     private String tableName = "job_event_log";
@@ -56,5 +58,13 @@ public class JdbcJobStoreProperties {
 
     public void setRestEnabled(boolean restEnabled) {
         this.restEnabled = restEnabled;
+    }
+
+    public boolean isWebEnabled() {
+        return webEnabled;
+    }
+
+    public void setWebEnabled(boolean webEnabled) {
+        this.webEnabled = webEnabled;
     }
 }

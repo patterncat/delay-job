@@ -1,12 +1,11 @@
 package cn.patterncat.job.admin.controller;
 
-import cn.patterncat.job.admin.model.RestResp;
+import cn.patterncat.rest.ApiResult;
 import net.greghaines.jesque.meta.KeyInfo;
 import net.greghaines.jesque.meta.dao.KeysDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +20,9 @@ public class RedisInfoController {
     KeysDAO keysDAO;
 
     @GetMapping("")
-    public RestResp<Map<String, String>> redisInfo(){
+    public ApiResult<Map<String, String>> redisInfo(){
         Map<String, String> info = keysDAO.getRedisInfo();
-        return RestResp.<Map<String, String>>builder().success(true).data(info).build();
+        return ApiResult.success(info);
     }
 
     /**
@@ -31,9 +30,9 @@ public class RedisInfoController {
      * @return
      */
     @GetMapping("/keys")
-    public RestResp<List<KeyInfo>> getAllKeys(){
+    public ApiResult<List<KeyInfo>> getAllKeys(){
         List<KeyInfo> keyInfos = keysDAO.getKeyInfos();
-        return RestResp.<List<KeyInfo>>builder().success(true).data(keyInfos).build();
+        return ApiResult.success(keyInfos);
     }
 
     /**
@@ -42,9 +41,9 @@ public class RedisInfoController {
      * @return
      */
     @GetMapping("/key/{key}")
-    public RestResp<KeyInfo> getKeyInfo(@PathVariable String key){
+    public ApiResult<KeyInfo> getKeyInfo(@PathVariable String key){
         KeyInfo keyInfo = keysDAO.getKeyInfo(key);
-        return RestResp.<KeyInfo>builder().success(true).data(keyInfo).build();
+        return ApiResult.success(keyInfo);
     }
 
     /**
@@ -55,10 +54,10 @@ public class RedisInfoController {
      * @return
      */
     @GetMapping("/key-values/{key}")
-    public RestResp<KeyInfo> getKeyWithValues(@PathVariable String key,
+    public ApiResult<KeyInfo> getKeyWithValues(@PathVariable String key,
                                               @RequestParam(required = false,defaultValue = "0") int page,
                                               @RequestParam(required = false,defaultValue = "10") int size){
         KeyInfo keyInfo = keysDAO.getKeyInfo(key,page,size);
-        return RestResp.<KeyInfo>builder().success(true).data(keyInfo).build();
+        return ApiResult.success(keyInfo);
     }
 }

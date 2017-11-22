@@ -17,6 +17,7 @@ jesque:
   store:
     jdbc:
       enabled: true
+      web-enabled: true
       table-name: job_event_log
       dataSourceName: pgDataSource
 spring:

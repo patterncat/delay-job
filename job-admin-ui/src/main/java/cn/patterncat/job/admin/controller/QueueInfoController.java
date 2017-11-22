@@ -1,6 +1,6 @@
 package cn.patterncat.job.admin.controller;
 
-import cn.patterncat.job.admin.model.RestResp;
+import cn.patterncat.rest.ApiResult;
 import net.greghaines.jesque.meta.QueueInfo;
 import net.greghaines.jesque.meta.dao.QueueInfoDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class QueueInfoController {
      */
     @GetMapping("/names")
     @Deprecated
-    public RestResp<List<String>> getQueueNames(){
+    public ApiResult<List<String>> getQueueNames(){
         List<String> queueNames = queueInfoDAO.getQueueNames();
-        return RestResp.<List<String>>builder().success(true).data(queueNames).build();
+        return ApiResult.success(queueNames);
     }
 
     /**
@@ -39,12 +39,12 @@ public class QueueInfoController {
      * @return
      */
     @GetMapping("/{queueName}")
-    public RestResp<QueueInfo> queueWithJobInfo(@PathVariable String queueName,
+    public ApiResult<QueueInfo> queueWithJobInfo(@PathVariable String queueName,
                                                 @RequestParam(required = false,defaultValue = "0") int page,
                                                 @RequestParam(required = false,defaultValue = "10") int size){
         Pageable pageable = new PageRequest(page,size);
         QueueInfo queueInfo = queueInfoDAO.getQueueInfo(queueName,pageable.getOffset(),size);
-        return RestResp.<QueueInfo>builder().success(true).data(queueInfo).build();
+        return ApiResult.success(queueInfo);
     }
 
     /**
@@ -54,22 +54,19 @@ public class QueueInfoController {
      * @return
      */
     @GetMapping("")
-    public RestResp<List<QueueInfo>> queueInfos(){
-        return RestResp.<List<QueueInfo>>builder()
-                .success(true)
-                .data(queueInfoDAO.getQueueInfos())
-                .build();
+    public ApiResult<List<QueueInfo>> queueInfos(){
+        return ApiResult.success(queueInfoDAO.getQueueInfos());
     }
 
     @GetMapping("/stat/processed")
-    public RestResp<Long> getProcessedJobCount(){
+    public ApiResult<Long> getProcessedJobCount(){
         Long processedCount = queueInfoDAO.getProcessedCount();
-        return RestResp.<Long>builder().success(true).data(processedCount).build();
+        return ApiResult.success(processedCount);
     }
 
     @DeleteMapping("/{queueName}")
-    public RestResp removeQueue(@PathVariable String queueName){
+    public ApiResult removeQueue(@PathVariable String queueName){
         queueInfoDAO.removeQueue(queueName);
-        return RestResp.builder().success(true).build();
+        return ApiResult.success();
     }
 }
