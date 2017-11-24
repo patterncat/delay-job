@@ -11,9 +11,11 @@ use jesque as a delay queue implementation
 - v0.0.1
 
 ## springboot-jesque-starter
+- v0.0.5 with job-common v0.0.3
 - v0.0.4
 
 ## job-common
+- v0.0.3 rename JOB_SUBMITT --> JOB_SUBMIT
 - v0.0.2
 
 ## job-event-store-jdbc

@@ -26,7 +26,7 @@ public class JesqueService {
 
     public void delayedEnqueue(String queue,Job job,long futureFireTimeInMillis){
         applicationEventPublisher.publishEvent(from(queue,job)
-                .jobEventType(JobEventType.JOB_SUBMITT)
+                .jobEventType(JobEventType.JOB_SUBMIT)
                 .jobType(JobType.DELAYED)
                 .future(futureFireTimeInMillis)
                 .build()
@@ -36,7 +36,7 @@ public class JesqueService {
 
     public void immediateEnqueue(String queue, Job job){
         applicationEventPublisher.publishEvent(from(queue,job)
-                        .jobEventType(JobEventType.JOB_SUBMITT)
+                        .jobEventType(JobEventType.JOB_SUBMIT)
                         .jobType(JobType.IMMEDIATE)
                         .build()
         );
@@ -45,7 +45,7 @@ public class JesqueService {
 
     public void priorityEnqueue(String queue, Job job){
         applicationEventPublisher.publishEvent(from(queue,job)
-                .jobEventType(JobEventType.JOB_SUBMITT)
+                .jobEventType(JobEventType.JOB_SUBMIT)
                 .jobType(JobType.PRIORITY)
                 .build()
         );
@@ -54,7 +54,7 @@ public class JesqueService {
 
     public void recurringEnqueue(String queue, Job job, long future, long frequency){
         applicationEventPublisher.publishEvent(from(queue,job)
-                .jobEventType(JobEventType.JOB_SUBMITT)
+                .jobEventType(JobEventType.JOB_SUBMIT)
                 .jobType(JobType.RECURRING)
                 .future(future)
                 .frequency(frequency)

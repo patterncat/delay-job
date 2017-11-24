@@ -17,7 +17,7 @@ public enum JobEventType {
     /**
      * WHEN CLIENT SUBMIT A JOB
      */
-    JOB_SUBMITT,
+    JOB_SUBMIT,
 
     /**
      * WHEN CLIENT REMOVE A JOB
