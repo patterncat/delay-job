@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Job Admin</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- MetisMenu CSS -->
+    <link href="/css/metisMenu.min.css" rel="stylesheet" />
+    <!-- Timeline CSS -->
+    <link href="/css/timeline.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="/css/startmin.css" rel="stylesheet" />
+    <!-- Custom Fonts -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- page-->
+    <link href="/css/jBootstrapPage.css" rel="stylesheet" />
+    <!-- dialog -->
+    <link href="/css/bootstrap-dialog.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    Job Admin
+                </a>
+            </div>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">
+                        Toggle navigation
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+                    <span class="icon-bar">
+                    </span>
+            </button>
+            <!-- Top Navigation: Right Menu -->
+            <ul class="nav navbar-right navbar-top-links">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw">
+                        </i>
+                        Admin
+                        <b class="caret">
+                        </b>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-user fa-fw">
+                                </i>
+                                User Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-gear fa-fw">
+                                </i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="divider">
+                        </li>
+                        <li>
+                            <a href="/logout" id="logoutHref">
+                                <i class="fa fa-sign-out fa-fw">
+                                </i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Sidebar -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/redis.html" class="active">
+                                <i class="fa fa-dashboard fa-fw">
+                                </i>
+                                redis
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/job.html" class="active">
+                                <i class="fa fa-dashboard fa-fw">
+                                </i>
+                                job
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/queue.html" class="active">
+                                <i class="fa fa-dashboard fa-fw">
+                                </i>
+                                queue
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/worker.html" class="active">
+                                <i class="fa fa-dashboard fa-fw">
+                                </i>
+                                worker
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/job-history.html" class="active">
+                                <i class="fa fa-dashboard fa-fw">
+                                </i>
+                                job-history
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <!-- title-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            history jobs
+                        </h1>
+                    </div>
+                </div>
+                <!-- panel-->
+                <div class="panel">
+                    <div class="panel panel-header">
+                        <form class="form-inline" style="margin-left: 13px">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="jobId" placeholder="jobId"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="namespace" placeholder="namespace"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="queue" placeholder="queue"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="jobClass" placeholder="jobClass"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="eventTimeGte" placeholder="eventTimeGte"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="eventTimeLte" placeholder="eventTimeLte"/>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="jobEventType" placeholder="jobEventType"/>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="queryBtn" onclick="query(0,10)">
+                                查询
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="clearInput()">
+                                重置
+                            </button>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        <!-- table-->
+                        <table id="mytable" width="100%" class="table table-bordered table-hover"
+                               cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>
+                                    id
+                                </th>
+                                <th>
+                                    namespace
+                                </th>
+                                <th>
+                                    workerName
+                                </th>
+                                <th>
+                                    queue
+                                </th>
+                                <th>
+                                    jobId
+                                </th>
+                                <th>
+                                    jobClass
+                                </th>
+                                <th>
+                                    jobEventType
+                                </th>
+                                <th>
+                                    jobType
+                                </th>
+                                <th>
+                                    eventTimestamp
+                                </th>
+                                <th>
+                                    args
+                                </th>
+                                <th>
+                                    vars
+                                </th>
+                                <th>
+                                    unknown
+                                </th>
+                                <th>
+                                    runner
+                                </th>
+                                <th>
+                                    result
+                                </th>
+                                <th>
+                                    throwable
+                                </th>
+                                <th>
+                                    createTime
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <!-- pager-->
+                        <div>
+                            <ul class="pagination">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end Page Content -->
+
+        <!-- jQuery -->
+        <script src="/js/jquery.min.js">
+        </script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="/js/bootstrap.min.js">
+        </script>
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="/js/metisMenu.min.js">
+        </script>
+        <!-- Custom Theme JavaScript -->
+        <script src="/js/startmin.js">
+        </script>
+        <!-- page-->
+        <script src="/js/jBootstrapPage.js">
+        </script>
+        <!-- convert timestamp-->
+        <script src="/js/convert-timestamp.js">
+        </script>
+        <!-- dialog -->
+        <script src="/js/bootstrap-dialog.min.js">
+        </script>
+        <!-- page javascript -->
+        <script type="text/javascript">
+
+        $('#logoutHref').click(function(e) {
+            logout()
+        })
+
+        function logout(){
+            $.ajax({
+                url: '/logout',
+                type: 'POST',
+                success: function (res, status) {
+                    window.location.href='/index.html'
+                },
+                error: function (res, status) {
+                    showErrorDialog(res.statusText);
+                }
+            });
+        }
+
+        function renderPage(pageSize, total) {
+            $(".pagination").jBootstrapPage({
+                pageSize: pageSize,
+                total: total,
+                maxPageButton: 5,
+                onPageClicked: function(obj, pageIndex) {
+                    //ajax get page data
+                    query(pageIndex, pageSize);
+                }
+            });
+        }
+
+        function clearInput() {
+            $('#jobId').val('');
+            $('#namespace').val('');
+            $('#queue').val('');
+            $('#jobClass').val('');
+            $('#eventTimeGte').val('');
+            $('#eventTimeLte').val('');
+            $('#jobEventType').val('');
+        }
+
+        function query(page, size) {
+            var jobId = $('#jobId').val();
+            var namespace = $('#namespace').val();
+            var queue = $('#queue').val();
+            var jobClass = $('#jobClass').val();
+            var eventTimeGte = $('#eventTimeGte').val();
+            var eventTimeLte = $('#eventTimeLte').val();
+            var jobEventType = $('#jobEventType').val();
+            var data = {
+                "jobId": jobId,
+                "namespace": namespace,
+                "queue": queue,
+                "jobClass": jobClass,
+                "eventTimeGte": eventTimeGte,
+                "eventTimeLte": eventTimeLte,
+                "jobEventType": jobEventType,
+                "page": page,
+                "size": size
+            };
+            $.ajax({
+                url: '/job-log',
+                type: 'GET',
+                data: data,
+                success: function(resp, status) {
+                    if (status == 'success') {
+                        if (resp.success == false) {
+                            showErrorDialog(resp);
+                            return;
+                        }
+                        console.log(resp.data);
+                        var table = $('table tbody');
+                        table.children('tr').remove();
+                        $.each(resp.data.content,
+                                function(n, item) {
+                                    var row = "<tr>";
+                                    row = row + "<td>" + item.id + "</td>";
+                                    row = row + "<td>" + item.namespace + "</td>";
+                                    row = row + "<td>" + item.workerName + "</td>";
+                                    row = row + "<td>" + item.queue + "</td>";
+                                    row = row + "<td>" + item.jobId + "</td>";
+                                    row = row + "<td>" + item.jobClass + "</td>";
+                                    row = row + "<td>" + item.jobEventType + "</td>";
+                                    row = row + "<td>" + item.jobType + "</td>";
+                                    row = row + "<td>" + convertTimestamp(item.eventTimestamp) + "</td>";
+                                    row = row + "<td>" + item.jobArgs + "</td>";
+                                    row = row + "<td>" + item.jobVars + "</td>";
+                                    row = row + "<td>" + item.jobUnknownFields + "</td>";
+                                    row = row + "<td>" + item.runner + "</td>";
+                                    row = row + "<td>" + item.result + "</td>";
+                                    row = row + "<td>" + item.throwable + "</td>";
+                                    row = row + "<td>" + convertTimestamp(item.createTime) + "</td>";
+                                    row = row + "</tr>";
+                                    table.append(row);
+                                });
+                        if (page == 0) {
+                            totalCount = resp.data.totalElements;
+                            renderPage(size, totalCount);
+                        }
+                    }
+                },
+                error: function(resp, status) {
+                    if (status == "error") {
+                        showErrorDialog(resp);
+                    }
+                }
+            });
+        }
+
+        function showErrorDialog(msg) {
+            console.log(msg);
+            BootstrapDialog.alert(msg);
+        }
+    </script>
+    </div>
+</body>
+</html>

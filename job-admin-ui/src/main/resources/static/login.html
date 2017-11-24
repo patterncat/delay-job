@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <!-- Bootstrap -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="./css/login.css" rel="stylesheet" media="screen">
+    <link href="./css/bootstrap-dialog.min.css" rel="stylesheet">
+</head>
+<body id="login">
+<div class="container">
+    <div class="row">
+        <div class="login">
+            <div class="login-triangle"></div>
+
+            <h2 class="login-header">Welcome</h2>
+
+            <form class="login-container">
+                <p><input type="text" name="name" id="name" placeholder="Name"></p>
+                <p><input type="password" name="password" id="password" placeholder="Password"></p>
+                <p><input type="button" value="Log in" onclick="login()"></p>
+            </form>
+        </div>>
+    </div>
+</div>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/bootstrap-dialog.min.js"></script>
+<script type="text/javascript">
+    function login(){
+        console.log('login click');
+        var name = $('#name').val();
+        var password = $('#password').val();
+
+        if (!name || name.length == 0) {
+            dangerDialog('name不能为空');
+            return;
+        }
+
+        if (!password || password.length == 0) {
+            dangerDialog('password不能为空');
+            return;
+        }
+
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data: "name="+name+"&password="+password,
+            success: function (res, status) {
+                window.location.href='/index.html'
+            },
+            error: function (res, status) {
+                dangerDialog(res.statusText);
+            }
+        });
+    }
+
+    function dangerDialog(msg) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DANGER,
+            message: msg,
+            buttons: [{
+                label: '确定',
+                cssClass: 'btn-primary',
+                action: function (dialogItself) {
+                    dialogItself.close();
+                }
+            }]
+        });
+    }
+</script>
+</body>
+</html>

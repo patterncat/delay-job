@@ -17,6 +17,9 @@ use jesque as a delay queue implementation
 - v0.0.2
 
 ## job-event-store-jdbc
+- v0.0.4
+change to get datasouce rather than create one
+
 - v0.0.3
 
 add web controller

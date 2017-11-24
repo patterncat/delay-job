@@ -36,21 +36,20 @@ public class JdbcEventStoreAutoConfiguration implements ApplicationContextAware 
         this.properties = properties;
     }
 
-    @Bean
-    public DataSource jobDataSource() {
+    public DataSource getJobDataSource() {
         return (DataSource) context.getBean(properties.getDataSourceName());
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public JdbcTemplate jdbcTemplate(DataSource jobDataSource) {
-        return new JdbcTemplate(jobDataSource);
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(getJobDataSource());
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
-        return new NamedParameterJdbcTemplate(dataSource);
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(){
+        return new NamedParameterJdbcTemplate(getJobDataSource());
     }
 
     @Bean
